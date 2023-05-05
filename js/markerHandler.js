@@ -1,7 +1,7 @@
 AFRAME.registerComponent("markerhandler", {
     init: async function(){
         var games = await this.getGames();
-
+        console.log(games)
         this.el.addEventListener("markerFound", () => {
             var markerId = this.el.id;
             this.handleMarkerFound(games, markerId);
@@ -34,7 +34,7 @@ AFRAME.registerComponent("markerhandler", {
                 text: "You will play shortly!"
             });
         });
-
+        
         var game = games.filter(game => game.id === markerId)[0];
 
         var model = document.querySelector(`#model-${game.id}`);
@@ -49,12 +49,14 @@ AFRAME.registerComponent("markerhandler", {
     },
 
     getGames: async function(){
-        return await firebase
-        .firebase()
-        .collection("games")
+        return await firebase.firestore()
+        .collection("toys")
         .get()
         .then(snap => {
-            return snap.docs.map(doc => doc.data());
+            
+            return snap.docs.map(doc =>{ 
+                console.log(doc.data())
+                doc.data()});
         });
     }
 })
